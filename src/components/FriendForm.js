@@ -7,14 +7,20 @@ export default function FriendForm(props) {
   const onChange = evt => {
     // 🔥 STEP 6 - IMPLEMENT the change handler for our inputs and dropdown
     // a) pull the name of the input from the event object
+    const inputName = evt.target.name //either 'username', 'email'
     // b) pull the value of the input from the event object
+    const { value } = evt.target //   who knows, the current value
     // c) use the `update` callback coming in through props
+    update(inputName, value) // call the update function with the input name and value coming
+    //in through props, this will update the form state in the parent component
   }
 
   const onSubmit = evt => {
     // 🔥 STEP 7 - IMPLEMENT the submit handler
     // a) don't allow the browser to reload!
+    evt.preventDefault()
     // c) use the `submit` callback coming in through props
+    submit()
   }
 
   return (
@@ -28,10 +34,27 @@ export default function FriendForm(props) {
               Controlled inputs need `value` and `onChange` props.
               Inputs render what they're told - their current value comes from app state.
               At each keystroke, a change handler fires to change app state. */}
+
+              <input 
+                      type="text"
+                      value={values.username}
+                      onChange={onChange}
+                      name="username"
+                      placeholder="Enter username"
+                   />
         </label>
+
 
         <label>Email
           {/* 🔥 STEP 4 - Make an input of type `email` or `text` for email. */}
+
+          <input 
+                      type="email"
+                      value={values.email}
+                      onChange={onChange}
+                      name="email"
+                      placeholder="Enter email"
+                   />
         </label>
 
         {/* ////////// DROPDOWN ////////// */}
@@ -39,10 +62,23 @@ export default function FriendForm(props) {
         {/* ////////// DROPDOWN ////////// */}
         <label>Role
           {/* 🔥 STEP 5 - Make dropdown for role. */}
+          <select 
+                      value={values.role}
+                      onChange={onChange}
+                      name="role"
+                   >
+            <option value="">---Select a role---</option>
+            <option value="Student">Student</option>
+            <option value="Teacher">Teacher</option>
+            <option value="Admin">Admin</option>
+            <option value="TL">Team Lead</option>
+            <option value="Alumni">Alumni</option>
+
+        </select>
         </label>
 
         <div className='submit'>
-          <button>submit</button>
+          <button disabled={!values.username || !values.email || !values.role}>submit</button>
         </div>
       </div>
     </form>

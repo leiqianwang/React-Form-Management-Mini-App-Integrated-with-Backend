@@ -2,19 +2,21 @@
   "name": "web-guided-project-form-management",
   "version": "0.0.1",
   "scripts": {
-    "start": "parcel src/index.html"
+    "start": "parcel src/index.html",
+    "build": "parcel build src/index.html"
   },
   "license": "ISC",
   "devDependencies": {
+    "@parcel/transformer-less": "^2.15.4",
     "eslint": "^8.10.0",
     "eslint-plugin-react": "^7.29.2",
     "less": "^4.1.2",
-    "parcel-bundler": "^1.12.4"
+    "parcel": "^2.12.0"
   },
   "dependencies": {
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "uuid": "^8.3.2"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "uuid": "^9.0.0"
   },
   "repository": {
     "type": "git",
