@@ -4,6 +4,14 @@ export default function FriendForm(props) {
   // THESE ARE THE **EXACT PROPS** FriendForm EXPECTS!!!
   const { values, update, submit } = props
 
+  const roleOptions = [
+  "Trainer", 
+  "Developer", 
+  "Manager", 
+  "Designer", 
+  "Analyst"
+];
+
   const onChange = evt => {
     // 🔥 STEP 6 - IMPLEMENT the change handler for our inputs and dropdown
     // a) pull the name of the input from the event object
@@ -61,18 +69,31 @@ export default function FriendForm(props) {
         {/* ////////// DROPDOWN ////////// */}
         {/* ////////// DROPDOWN ////////// */}
         <label>Role
-          {/* 🔥 STEP 5 - Make dropdown for role. */}
+          {/* 🔥 STEP 5 - Make dropdown for role.
+          
+          Now the local data for role options will be integrated with Backend data.
+          The UI will be driven by the local data, but the options will be fetched from the backend.
+          Controlled dropdown needs `value` and `onChange` props. The data will be iterated 
+          dynamically using the `map` method.
+          At each change, a change handler fires to change app state.
+          
+          */}
           <select 
                       value={values.role}
                       onChange={onChange}
                       name="role"
                    >
             <option value="">---Select a role---</option>
-            <option value="Student">Student</option>
+            {roleOptions.map((role, index) => (
+              <option key={index} value={role}>
+                {role}
+              </option>
+            ))}
+            {/* <option value="Student">Student</option>
             <option value="Teacher">Teacher</option>
             <option value="Admin">Admin</option>
             <option value="TL">Team Lead</option>
-            <option value="Alumni">Alumni</option>
+            <option value="Alumni">Alumni</option> */}
 
         </select>
         </label>
