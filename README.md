@@ -15,14 +15,6 @@ being used by another application.
 
 ##  Spring Boot Backend Overview
 This project uses Spring Boot to provide a RESTful API for managing Friends and Pets data. The backend is built with Java, Spring Boot, and Maven, and connects to an H2 in-memory database for development and testing.
-
-
-Features
-CRUD operations for Friends and Pets entities
-Role-based authentication using Spring Security
-CORS support for integration with frontend applications
-H2 Console for easy database inspection
-
 #  API Endpoints
 /friends - Manage friends (GET, POST, etc.)
 /pets - Manage pets (GET, POST, etc.)
