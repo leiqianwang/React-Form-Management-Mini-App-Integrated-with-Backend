@@ -23,6 +23,6 @@ Role-based authentication using Spring Security
 CORS support for integration with frontend applications
 H2 Console for easy database inspection
 
-##  API Endpoints
+#  API Endpoints
 /friends - Manage friends (GET, POST, etc.)
 /pets - Manage pets (GET, POST, etc.)
