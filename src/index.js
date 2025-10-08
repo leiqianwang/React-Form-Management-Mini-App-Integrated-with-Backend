@@ -1,15 +1,16 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createRoot } from 'react-dom/client'
+import axios from './axios' // the custom axios instance we made
 // 👉 App contains a more sophisticated form we'll flesh out later
 import App from './components/App'
 
 // 👉 First let's build a SimpleForm to add more pets:
-const petsList = [
-  { petName: 'Fido', petType: 'dog' },
-  { petName: 'Tweetie', petType: 'canary' },
-  { petName: 'Goldie', petType: 'fish' },
-]
+// const petsList = [
+//   { petName: 'Fido', petType: 'dog' },
+//   { petName: 'Tweetie', petType: 'canary' },
+//   { petName: 'Goldie', petType: 'fish' },
+// ]
 
 const initialFormValues = { petName: '', petType: '' }
 
@@ -17,14 +18,30 @@ function SimpleForm() {
 
   //Use state to initialize the data to the state 
 
-  const [pets, setPets] = useState(petsList);
+  const [pets, setPets] = useState([]);
   // const [petName, setPetName] = useState('');
   // onst [petType, setPetType] = useState('');
 
   const [formValues, setFormValues] = useState(initialFormValues);
 
+useEffect(() => {
+  
 
-  const [error, setError] = useState('');
+  //Make API call to get all pets from the backend
+  // axios.get('/pets').then(res => {
+  //   setPets(res.data)
+  // }).catch(err => {
+  //   console.error('Error fetching pets:', err)
+  // })
+
+  axios.get("/pets").then(res => {
+     setPets(res.data);
+     console.log('Pets state has changed:', res.data)
+  }).catch(err => {
+    console.error("Error fetching pets:", err);
+
+  })
+}, []);
 
   const change = (evt) => {
     const { name, value } = evt.target;
@@ -42,36 +59,35 @@ function SimpleForm() {
      * c) add the new pet to the list of pets in state
      * d) clear the form
      * */
-
+    console.log('Submitting called');
     evt.preventDefault(); // prevent the default form submission behavior
     
+
+    console.log('Form values before creating newPet:', formValues);
     // Create a new pet object with trimmed values
     const newPet = {
       petName: formValues.petName.trim(),
       petType: formValues.petType.trim(),
     };
+    console.log('newPet object created:', newPet);
 
-    // Validate that both fields have content after trimming
-    if (!newPet.petName || !newPet.petType) {
-      setError('Both fields are required');
-      return;
-    }
-
-    // Add the new pet using concat (creates new array)
-    setPets(pets.concat(newPet));
-    setFormValues(initialFormValues); // clear the form
-    setError(''); // clear any previous error message
+    //Make API call to add pet to backend
+    axios.post('/pets/addPet', newPet).then(res => {
+        console.log('Pet added successfully:', res.data);
+        //Assuming backend returns the newly created pet object
+        setPets([...pets, res.data]);
+        setFormValues(initialFormValues); // clear the form
+    })
+    .catch(err => {
+        console.error('Error adding pet:', err);
+    });
   }
-
 
 
 
   return (
     <div className="container">
       <h1>Simple Form</h1>
-
-      {/* Display error message if there is one */}
-      {error && <p className="error">{error}</p>}
 
       {/* Display list of pets */}
       {pets.map((pet, index) => (

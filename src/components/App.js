@@ -21,8 +21,6 @@ export default function App() {
   const updateForm = (inputName, inputValue) => {
     // 🔥 STEP 8 - IMPLEMENT a "form state updater" which will be used inside the inputs' `onChange` handler
     //  It takes in the name of an input and its value, and updates `formValues`
-
-    
     setFormValues({
       ...formValues,
       [inputName]: inputValue, // dynamically set the property name based on the input's name
@@ -43,8 +41,8 @@ export default function App() {
       return;
     }
     //  c) POST new friend to backend, and on success update the list of friends in state with the new friend from API
-    axios.post('fakeapi.com', newFriend).then(res => {
-      const friendFromBackend = res.data // includes a unique 'id' - assume a real api endpoint url here
+    axios.post('/friends/addFriend', newFriend).then(res => {
+      const friendFromBackend = res.data // includes a unique 'id' - from real Spring Boot API
       setFriends([friendFromBackend, ...friends]) // add new friend at the beginning
       setFormValues(initialFormValues); // reset the form values to initial state
     }).catch(err => {
@@ -53,8 +51,28 @@ export default function App() {
     });
   }
 
+  const deleteFriend = (friendId) => {
+    // 🔥 DELETE function - Remove friend from database and update state
+    axios.delete(`/friends/${friendId}`).then(res => {
+      // Remove friend from state after successful deletion
+      setFriends(friends.filter(friend => friend.id !== friendId));
+    }).catch(err => {
+      console.error('Error deleting friend:', err);
+      alert('An error occurred while deleting the friend');
+    });
+  }
+
   useEffect(() => {
-    axios.get('fakeapi.com').then(res => setFriends(res.data))
+    axios.get('/friends').then(res => {
+      console.log('Friends data received:', res.data)
+      setFriends(res.data)
+    })
+      .catch(err => {
+        console.error('Error fetching friends:', err)
+        console.error('Error details:', err.response?.data)
+        console.error('Error status:', err.response?.status)
+        console.error('Error message:', err.message)
+      })
   }, [])
 
   return (
@@ -73,7 +91,11 @@ export default function App() {
       {
         friends.map(friend => {
           return (
-            <Friend key={friend.id} details={friend} />
+            <Friend 
+              key={friend.id} 
+              details={friend} 
+              onDelete={deleteFriend}
+            />
           )
         })
       }
